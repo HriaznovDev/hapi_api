@@ -1,5 +1,6 @@
-
 const Hapi = require('hapi');
+
+const { NODE_ENV } = process.env;
 
 // Create a server with a host and port
 const server = Hapi.server({
@@ -11,27 +12,28 @@ const server = Hapi.server({
 server.route({
   method: 'GET',
   path: '/',
-  handler(request, h) {
-    return 'hello';
-  }
+  handler: (request, h) => 'hello'
 });
 
 server.route({
   method: 'GET',
   path: '/hello',
-  handler(request, h) {
-    return 'hello world';
-  }
+  handler: (request, h) => 'hello world'
 });
+
+if (NODE_ENV === 'development') {
+  server.events.on('response', request => {
+    console.log(
+      `${request.info.remoteAddress}: ${request.method.toUpperCase()} ${request.url.pathname} --> ${
+        request.response.statusCode
+      }`
+    );
+  });
+}
 
 // Start the server
 const start = async () => {
-  try {
-    await server.start();
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
-  }
+  await server.start();
 
   console.log('Server running at:', server.info.uri);
 };
