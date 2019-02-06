@@ -1,4 +1,3 @@
-'use strict';
 
 const Hapi = require('hapi');
 
@@ -12,7 +11,7 @@ const server = Hapi.server({
 server.route({
   method: 'GET',
   path: '/',
-  handler: function(request, h) {
+  handler(request, h) {
     return 'hello';
   }
 });
@@ -20,7 +19,7 @@ server.route({
 server.route({
   method: 'GET',
   path: '/hello',
-  handler: function(request, h) {
+  handler(request, h) {
     return 'hello world';
   }
 });
